@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Label, Entry, Button
+from tkinter import Label, Entry, Button, StringVar, OptionMenu
 import qrcode
 
 def generate_qr_code(medicine_name, time_to_take, additional_info):
@@ -13,7 +13,7 @@ def generate_qr_code(medicine_name, time_to_take, additional_info):
 
 def generate_qr_code_and_display():
     medicine_name = medicine_name_entry.get()
-    time_to_take = time_to_take_entry.get()
+    time_to_take = f"{time_to_take_entry.get()} {ampm_var.get()}"
     additional_info = additional_info_entry.get()
 
     qr_code_image = generate_qr_code(medicine_name, time_to_take, additional_info)
@@ -21,7 +21,7 @@ def generate_qr_code_and_display():
     # QR code image
     qr_code_image.show()
 
-#main window
+# main window
 root = tk.Tk()
 root.title("QR Code Generator")
 
@@ -33,6 +33,13 @@ medicine_name_entry.pack()
 Label(root, text="Time to Take:").pack()
 time_to_take_entry = Entry(root)
 time_to_take_entry.pack()
+
+# AM/PM dropdown
+Label(root, text="AM/PM:").pack()
+ampm_var = StringVar(root)
+ampm_var.set("AM")
+ampm_menu = OptionMenu(root, ampm_var, "AM", "PM")
+ampm_menu.pack()
 
 Label(root, text="Additional Info:").pack()
 additional_info_entry = Entry(root)
