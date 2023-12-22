@@ -9,6 +9,8 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 # Open a video capture object (0 corresponds to the default camera)
 cap = cv2.VideoCapture(0)
 
+prev_emotion = "Neutral"  # Initialize with a neutral emotion
+
 while True:
     # Read a frame from the video capture
     ret, frame = cap.read()
@@ -35,12 +37,16 @@ while True:
 
         # Check if a face was detected before accessing the results
         if 'emotion' in emotion_predictions:
-            dominant_emotion = emotion_predictions['emotion']['dominant']
+            current_emotion = emotion_predictions['emotion']['dominant']
         else:
-            dominant_emotion = "Unknown"
+            current_emotion = "Unknown"
+
+        # Check if the emotion has changed significantly
+        if current_emotion != "Unknown" and current_emotion != prev_emotion:
+            prev_emotion = current_emotion
 
         # Display the emotion text
-        cv2.putText(frame, f'Emotion: {dominant_emotion}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2, cv2.LINE_AA)
+        cv2.putText(frame, f'Emotion: {prev_emotion}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2, cv2.LINE_AA)
 
     # Display the resulting frame
     cv2.imshow('Face Tracker', frame)
